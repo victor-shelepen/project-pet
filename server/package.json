@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "commander:run": "node -r ./runner.js ./commander/index.js",
-    "commander:debug": "node --inspect-brk -r ./runner.js ./commander/index.js"
+    "commander:run": "node -r ./runner.js ./src/commander/index.js",
+    "commander:debug": "node --inspect-brk -r ./runner.js ./src/commander/index.js"
   },
   "keywords": [],
   "author": "",
