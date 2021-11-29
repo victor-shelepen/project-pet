@@ -8,10 +8,20 @@ require('dotenv').config();
 (async function () {
   await allocateApplication()
 
+  const groups = [
+    {
+      name: 'user',
+      title: 'User',
+      description: 'User operations'
+    }
+  ]
+
   await runCommand(
+    process.argv.slice(2),
     [
       {
-        name: 'user_list',
+        name: 'list',
+        group: 'user',
         title: 'Prints users',
         handler: async () => {
           const users = await User.find()      
@@ -19,8 +29,9 @@ require('dotenv').config();
         }
       },
       {
-        name: 'user_generate_fake',
+        name: 'generate_fake',
         title: 'Generate and save a fake user.',
+        group: 'user',
         handler: async () => {
           const user = new User({
             name: faker.name.findName(),
@@ -41,10 +52,10 @@ require('dotenv').config();
         }
       },
     ],
+    groups,
     {
       DateFactory: Date
-    },
-    process.argv.slice(2)
+    }
   )
 
   await disposeApplication()
