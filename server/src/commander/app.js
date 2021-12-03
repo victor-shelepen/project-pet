@@ -1,4 +1,4 @@
-import {xprs } from '../express'
+import { xprs } from '../express'
 
 export const groups = [
   {
