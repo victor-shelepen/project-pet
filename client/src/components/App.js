@@ -8,6 +8,7 @@ import Header from './Header'
 import About from '../page/About'
 import Users from '../page/Users'
 import Home from '../page/Home'
+import Login from '../page/Login'
 
 export default function () {
   return (
@@ -17,6 +18,7 @@ export default function () {
         <Route path="/" element={<Home />} />
         <Route path="/users" element={<Users />} />
         <Route path="/about" element={<About />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </Router>
   )

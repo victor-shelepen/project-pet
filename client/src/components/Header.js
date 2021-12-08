@@ -1,4 +1,4 @@
-import Reac from 'react';
+import React from 'react';
 import { AppBar, Toolbar, IconButton, Button } from '@material-ui/core'
 import {
   Menu as MenuIcon
@@ -18,6 +18,7 @@ export default function () {
         <Button color="inherit" component={Link} to='/'>Home</Button>
         <Button color="inherit" component={Link} to='/users'>Users</Button>
         <Button color="inherit" component={Link} to='/about'>About</Button>
+        <Button color="inherit" component={Link} to='/login'>Login</Button>
       </Toolbar>
     </AppBar>
   )
