@@ -1,0 +1,14 @@
+@appUrl = http://localhost:3001
+###
+// Get page.
+GET {{appUrl}} HTTP/1.1
+
+###
+// Authenticate.
+POST {{appUrl}}/login HTTP/1.1
+content-type: application/json
+
+{
+    "user": "victor.shelepen@gmail.com",
+    "password": "12345678"
+}

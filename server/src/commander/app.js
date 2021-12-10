@@ -1,4 +1,5 @@
 import { xprs } from '../express'
+import { allocateApplication } from '../app'
 
 export const groups = [
   {
@@ -14,6 +15,8 @@ export const commands = [
     group: 'app',
     title: 'Starts the web server.',
     handler: async () => {
+      await allocateApplication()
+      console.log('Application has been allocated.');
       const port = process.env.PORT
       xprs.listen(port, () => {
         console.log(`Example app listening at http://localhost:${port}`)
