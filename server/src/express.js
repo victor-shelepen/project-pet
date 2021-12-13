@@ -1,14 +1,43 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import User from './db/User'
+import { decodeToken, encodeToken } from './lib'
 
 export const xprs = express()
 xprs.use(bodyParser.urlencoded({ extended: false }))
 xprs.use(bodyParser.json())
 xprs.set('view engine', 'pug');
 
-xprs.get('/', (req, res) => {
-  res.send('Hello World!!!')
+xprs.use(async function (req, res, next) {
+  if (!req.headers.authorization) {
+    next()
+  }
+  const [, string ] = req.headers.authorization.split(' ')
+  const { userId } = decodeToken(string)
+  const user = await User.findOne({_id: userId})
+  req.user = user
+  next();
+});
+
+xprs.get('/', async (req, res) => {
+  res.send(`Hello World!!!${req?.user?.email}`)
+})
+
+xprs.get('/users', async (req, res) => {
+  if (!req?.user) {
+    res
+      .status(401)
+      .json({
+        status: false,
+        message: 'The user should be authenticated.'
+      })
+    return
+  }
+
+  const _users = await User.find()
+  const users = _users.map(u => u.toObject())
+  res
+    .json({users})
 })
 
 xprs.post('/login', async (req, res) => {
@@ -22,10 +51,12 @@ xprs.post('/login', async (req, res) => {
     return
   }
   if (user.comparePassword(password)) {
-    // @TODO set Cookies....
+    const token = encodeToken(user._id)
+    res.setHeader('Set-Cookie', `token=${token}`);
     res.json({
       status: true,
-      message: `You(${user.email}) have been authenticated successfuly.`
+      message: `You(${user.email}) have been authenticated successfuly.`,
+      token
     })
   } else {
     res.json({

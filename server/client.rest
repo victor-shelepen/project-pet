@@ -1,5 +1,7 @@
 @appUrl = http://localhost:3001
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MWExMGQ3NmFkNmVlYWIwODY0NzU0N2EiLCJpYXQiOjE2Mzk0MDcyMjZ9.91eeS2mES25rJMb3LwKq7EiJ_wIh9oMgX6dv8FYedmY
 ###
+
 // Get page.
 GET {{appUrl}} HTTP/1.1
 
@@ -12,3 +14,13 @@ content-type: application/json
     "email": "Jeanne.Kutch28@hotmail.com",
     "password": "some_password"
 }
+
+###
+// Get page.
+GET {{appUrl}} HTTP/1.1
+Authorization: token {{token}}
+
+###
+// Get users.
+GET {{appUrl}}/users HTTP/1.1
+Authorization: token {{token}}
