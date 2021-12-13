@@ -10,5 +10,5 @@ content-type: application/json
 
 {
     "email": "Jeanne.Kutch28@hotmail.com",
-    "password": "123456"
+    "password": "some_password"
 }

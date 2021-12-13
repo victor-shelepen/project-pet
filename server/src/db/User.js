@@ -1,6 +1,7 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose'
+import { generateHash } from '../lib'
 
-const { String } = mongoose.Schema.Types;
+const { String } = mongoose.Schema.Types
 
 const UserSchema = new mongoose.Schema(
   {
@@ -16,18 +17,31 @@ const UserSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
-      select: true
+      select: false
     },
     role: {
       type: String,
       required: true,
-      default: "user",
-      enum: ["user", "admin", "root"]
+      default: 'user',
+      enum: ['user', 'admin', 'root']
     }
   },
   {
     timestamps: true
   }
-);
+)
 
-export default mongoose.models.User || mongoose.model("User", UserSchema);
+UserSchema.pre('save', async function () {
+  const hash = generateHash(this.password)
+  if (this.isModified('password') || this.isNew) {
+    this.password = hash
+  }
+})
+
+UserSchema.methods.comparePassword = function(candidatePassword) {
+  const hash = generateHash(candidatePassword)
+
+  return this.password == hash
+}
+
+export default mongoose.models.User || mongoose.model('User', UserSchema);

@@ -13,7 +13,7 @@ xprs.get('/', (req, res) => {
 
 xprs.post('/login', async (req, res) => {
   const {email, password} = req.body
-  const user = await User.findOne({ email })
+  const user = await User.findOne({ email }).select('+password')
   if (!user) {
     res.json({
       status: false,
@@ -21,7 +21,7 @@ xprs.post('/login', async (req, res) => {
     })
     return
   }
-  if (user.password == password) {
+  if (user.comparePassword(password)) {
     // @TODO set Cookies....
     res.json({
       status: true,

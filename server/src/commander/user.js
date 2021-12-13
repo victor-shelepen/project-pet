@@ -15,8 +15,30 @@ export const commands = [
     group: 'user',
     title: 'Prints users',
     handler: async () => {
-      const users = await User.find()      
-      console.log(users)
+      const users = await User
+        .find()
+      const objectUsers = users.map(u => u.toObject())
+      console.table(objectUsers)
+    }
+  },
+  {
+    name: 'reset_password',
+    group: 'user',
+    title: 'Resets the password.',
+    handler: async ({request}) => {
+      const [ email, password] = request.values
+      if (!password) {
+        console.log('The password is absent.')
+        return
+      }
+      const user = await User.findOne({ email })
+      if (!user) {
+        console.log(`The user with the email ${email} is not found.`)
+        return
+      }
+      user.password = password
+      await user.save()
+      console.log(`${email} has changed the password successfuly.`);
     }
   },
   {
@@ -28,7 +50,7 @@ export const commands = [
         name: faker.name.findName(),
         email: faker.internet.email(),
         password: '123456'
-      })      
+      })
       await user.save()
       console.log(user)
       console.log(`${user.name} with email ${user.email} has been generated.`)
