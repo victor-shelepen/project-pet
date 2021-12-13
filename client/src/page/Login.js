@@ -1,6 +1,10 @@
-import React, { useState } from "react"
+import React, { useState } from 'react'
 import { TextField, Button, Paper, makeStyles } from '@material-ui/core'
 import LoginIcon from '@material-ui/icons/AccountCircle'
+import { post } from '../lib'
+import {
+  Alert
+} from '@material-ui/lab';
 
 const useStyles = makeStyles({
   container: {
@@ -17,18 +21,34 @@ export default function () {
   const classes = useStyles()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [alert, setAlert] = useState()
 
-  function loginClicked() {
-    console.log('Login clicked...', email, password);
+  async function loginClicked() {
+    const url = '/api/login'
+    const data = {
+      email,
+      password
+    }
+    setIsLoading(true)
+    const response = await post(url, data)
+    setIsLoading(false)
+    const { status, message } = response
+    setAlert({
+      severity: !status ? 'error' : 'info',
+      message
+    })
   }
 
   return (
     <>
       <div className={classes.container}>
         <Paper className={classes.paper}>
+          { !!alert && (<Alert severity={alert.severity}>{alert.message}</Alert>) }
+
           <TextField
-            label="First Name"
-            variant="filled"
+            label='First Name'
+            variant='filled'
             required
             value={email}
             onChange={e => setEmail(e.target.value)}
@@ -36,15 +56,22 @@ export default function () {
           />
 
           <TextField
-            label="Password"
-            variant="filled"
+            label='Password'
+            variant='filled'
             required
             value={password}
             onChange={e => setPassword(e.target.value)}
             fullWidth
           />
 
-          <Button endIcon={<LoginIcon />} color="primary" onClick={loginClicked} fullWidth>Login</Button>
+          <Button
+            disabled={isLoading}
+            endIcon={<LoginIcon />}
+            color='primary'
+            onClick={loginClicked}
+            fullWidth>
+              Login
+           </Button>
         </Paper>
       </div>
     </>

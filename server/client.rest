@@ -11,8 +11,8 @@ POST {{appUrl}}/login HTTP/1.1
 content-type: application/json
 
 {
-    "email": "Jeanne.Kutch28@hotmail.com",
-    "password": "some_password"
+  "email": "Jeanne.Kutch28@hotmail.com",
+  "password": "some_password"
 }
 
 ###
