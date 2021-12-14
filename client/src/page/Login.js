@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { TextField, Button, Paper, makeStyles } from '@material-ui/core'
 import LoginIcon from '@material-ui/icons/AccountCircle'
-import { post } from '../lib'
+import { isAuthenticated, post, setToken } from '../lib'
 import {
   Alert
-} from '@material-ui/lab';
+} from '@material-ui/lab'
+import { useNavigate } from 'react-router-dom'
 
 const useStyles = makeStyles({
   container: {
@@ -18,6 +19,7 @@ const useStyles = makeStyles({
 })
 
 export default function () {
+  const navigate = useNavigate()
   const classes = useStyles()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -33,7 +35,11 @@ export default function () {
     setIsLoading(true)
     const response = await post(url, data)
     setIsLoading(false)
-    const { status, message } = response
+    const { status, message, token } = response
+    if (!!token) {
+      setToken(token)
+      navigate('/users')
+    }
     setAlert({
       severity: !status ? 'error' : 'info',
       message
