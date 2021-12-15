@@ -1,18 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useMemo, useEffect } from 'react';
 import { AppBar, Toolbar, IconButton, Button } from '@material-ui/core'
 import {
   Menu as MenuIcon
 } from '@material-ui/icons'
 import { Link, useNavigate } from "react-router-dom"
-import { libEM, removeToken, TOKEN_CHANGED_EVENT } from '../lib';
+import { LibEMContext, removeToken, TOKEN_CHANGED_EVENT } from '../lib';
 
 export default function () {
   const navigate = useNavigate()
   const [ vIsAuthenticated, setVIsAuthenticated] = useState()
 
-  libEM.on(TOKEN_CHANGED_EVENT, (token) => {
-    setVIsAuthenticated(!!token)
-  })
+  const libEM = useContext(LibEMContext)
+
+  useEffect(() => {
+    const listener = (token) => {
+      setVIsAuthenticated(!!token)
+    }
+    libEM.on(TOKEN_CHANGED_EVENT, listener)
+
+    return () => {
+      libEM.off(TOKEN_CHANGED_EVENT, listener)
+    }
+  }, [])
 
   function logoutClicked() {
     removeToken()

@@ -1,6 +1,9 @@
-import EventEmitter from 'EventEmitter'
+import { createContext } from 'react'
+import { EventEmitter } from 'events'
 
 export const libEM = new EventEmitter()
+
+export const LibEMContext = createContext(libEM)
 
 export const TOKEN_KEY = 'token'
 export const TOKEN_CHANGED_EVENT = 'tokenChanged'
