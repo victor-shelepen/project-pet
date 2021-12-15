@@ -24,7 +24,7 @@ xprs.get('/', async (req, res) => {
 })
 
 xprs.get('/users', async (req, res) => {
-  if (!req?.user) {
+  if (!req.user) {
     res
       .status(401)
       .json({
