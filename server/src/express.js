@@ -8,6 +8,17 @@ xprs.use(bodyParser.urlencoded({ extended: false }))
 xprs.use(bodyParser.json())
 xprs.set('view engine', 'pug');
 
+const path = __dirname + '/../../client/dist'
+xprs.use('/dist', express.static(path))
+
+// It removes prefix from the development proxy if it exists.
+xprs.use(function(req, res, next) {
+  if (req.url.startsWith('/api/')) {
+    req.url = req.url.substring(4)
+  }
+  next();
+});
+
 xprs.use(async function (req, res, next) {
   if (!req.headers.authorization) {
     next()
