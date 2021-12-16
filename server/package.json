@@ -6,7 +6,8 @@
   "scripts": {
     "commander:run": "node -r ./runner.js ./src/commander/index.js",
     "commander:debug": "node --inspect-brk -r ./runner.js ./src/commander/index.js",
-    "dev:listen": "nodemon -r ./runner.js ./src/commander/index.js app.listen"
+    "dev:listen": "nodemon -r ./runner.js ./src/commander/index.js app.listen",
+    "prod:listen": "nodemon -r ./runner.js ./src/commander/index.js app.listen 1 > log.out 2> err.out"
   },
   "keywords": [],
   "author": "",
