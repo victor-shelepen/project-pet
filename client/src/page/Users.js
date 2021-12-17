@@ -1,28 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import { List, ListItem, ListItemText, Paper } from '@material-ui/core'
+import { Paper, Grid } from '@material-ui/core'
+import UserFrame from '../components/User/Frame'
+import UserList from '../components/User/List'
+
 import { get } from '../lib'
 
-export default function() {
+export default function () {
   const [users, setUsers] = useState([])
 
   useEffect(async () => {
     console.log('API call users...');
-    const {users: _users} = await get('/api/users')
+    const { users: _users } = await get('/api/users')
     setUsers(_users)
   }, [])
 
   return (
     <>
       <h1>Users</h1>
-      <Paper>
-        <List>
+      <Grid container>
+        <Grid item xs={4}>
+          <UserList users={users}/>
+        </Grid>
+        <Grid item xs={8}>
           {users.map(u => (
-            <ListItem key={u._id}>
-              <ListItemText>{u.email}</ListItemText>
-            </ListItem>
+            <UserFrame key={u._id} user={u}>
+              Hello
+            </UserFrame>
           ))}
-        </List>
-      </Paper>
+        </Grid>
+      </Grid>
     </>
   )
 }
