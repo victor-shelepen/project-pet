@@ -9,6 +9,7 @@ export const TOKEN_KEY = 'token'
 export const TOKEN_CHANGED_EVENT = 'tokenChanged'
 
 let token = localStorage.getItem(TOKEN_KEY);
+libEM.emit(TOKEN_CHANGED_EVENT, token)
 
 export function isAuthenticated() {
   return !!token

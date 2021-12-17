@@ -4,11 +4,11 @@ import {
   Menu as MenuIcon
 } from '@material-ui/icons'
 import { Link, useNavigate } from "react-router-dom"
-import { LibEMContext, removeToken, TOKEN_CHANGED_EVENT } from '../lib';
+import { LibEMContext, removeToken, TOKEN_CHANGED_EVENT, isAuthenticated } from '../lib';
 
 export default function () {
   const navigate = useNavigate()
-  const [ vIsAuthenticated, setVIsAuthenticated] = useState()
+  const [ vIsAuthenticated, setVIsAuthenticated] = useState(isAuthenticated())
 
   const libEM = useContext(LibEMContext)
 

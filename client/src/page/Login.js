@@ -62,6 +62,7 @@ export default function () {
           />
 
           <TextField
+            type='password'
             label='Password'
             variant='filled'
             required
