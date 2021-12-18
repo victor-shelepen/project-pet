@@ -7,7 +7,7 @@ export default function ({ users }) {
     <List>
       {users.map(user => (
         <ListItem key={user._id}>
-          <ListItemText>{user.name}</ListItemText>
+          <ListItemText>{user.name} - {(new Date).valueOf()}</ListItemText>
         </ListItem>
       ))}
     </List>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { Grid, ButtonGroup, Button } from '@material-ui/core'
 import View from './View'
 import Form from './Form'
@@ -6,8 +6,16 @@ import Form from './Form'
 const VIEW_STATE = 'VIEW'
 const EDIT_STATE = 'EDIT'
 
-export default function ({ user }) {
+export default function ({ user, changed, deleted, children }) {
   const [ display, setDisplay ] = useState(VIEW_STATE)
+
+  const _changed = useCallback((_user) => {
+    changed(_user)
+  })
+
+  const _deleted = useCallback((_user) => {
+    deleted(_user)
+  })
 
   return (
     <>
@@ -20,8 +28,12 @@ export default function ({ user }) {
         </Grid>
         <Grid item>
           { display === VIEW_STATE && <View user={user}/>}
-          { display === EDIT_STATE && <Form user={user}/>}
+          { display === EDIT_STATE && <Form
+            user={user}
+            deleted={_deleted}
+            changed={_changed}/>}
         </Grid>
+        <Grid item>-{ children }-</Grid>
       </Grid>
     </>
   )
