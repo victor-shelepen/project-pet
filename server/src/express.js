@@ -17,7 +17,7 @@ xprs.use(function(req, res, next) {
     req.url = req.url.substring(4)
   }
   next();
-});
+})
 
 xprs.use(async function (req, res, next) {
   if (!req.headers.authorization) {
@@ -27,24 +27,29 @@ xprs.use(async function (req, res, next) {
   const { userId } = decodeToken(string)
   const user = await User.findOne({_id: userId})
   req.user = user
-  next();
-});
+  next()
+})
 
 xprs.get('/', async (req, res) => {
   res.send(`Hello World!!!${req?.user?.email}`)
 })
 
-xprs.get('/users', async (req, res) => {
-  if (!req.user) {
-    res
-      .status(401)
-      .json({
-        status: false,
-        message: 'The user should be authenticated.'
-      })
-    return
-  }
+function authRoute(type, url, callback) {
+  xprs[type](url, async (req, res) => {
+    if (!req.user) {
+      res
+        .status(401)
+        .json({
+          status: false,
+          message: 'The user should be authenticated.'
+        })
+      return
+    }
+    await callback(req, res)
+  })
+}
 
+authRoute('get', '/users', async (req, res) => {
   const _users = await User.find()
   const users = _users.map(u => u.toObject())
   res
