@@ -24,3 +24,14 @@ Authorization: token {{token}}
 // Get users.
 GET {{appUrl}}/users HTTP/1.1
 Authorization: token {{token}}
+
+###
+// Add measurement.
+POST {{appUrl}}/measurement/add HTTP/1.1
+content-type: application/json
+Authorization: token {{token}}
+
+{
+  "height": "171",
+  "weight": "78.2"
+}
