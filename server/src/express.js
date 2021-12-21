@@ -72,12 +72,58 @@ authRoute('get', '/users', async (req, res) => {
     .json({ users })
 })
 
+authRoute('get', '/measurement/list', async (req, res) => {
+  const userId = req.user._id
+  const measurements = (await Measurement.find({user: userId}).select('-user')).map(m => m.toObject())
+  res
+    .back({
+      measurements
+    })
+})
+
+authRoute('get', '/measurement/get/:id', async (req, res) => {
+  const userId = req.user._id
+  const id = req.params.id
+  const measurement = (await Measurement
+    .findOne({
+      user: userId,
+      _id: id
+    })
+    .select('-user'))
+    .toObject()
+  res
+    .back({
+      measurement
+    })
+})
+
+authRoute('get', '/measurement/delete/:id', async (req, res) => {
+  const userId = req.user._id
+  const id = req.params.id
+  await Measurement.findOneAndRemove({user: userId, _id: id})
+  res.back()
+})
+
 authRoute('post', '/measurement/add', async (req, res) => {
   const body = {
     ...(!req.body.user && { user: req.user._id }),
     ...req.body
   }
-  const measurement = new Measurement(body)
+  let measurement
+  if (!body._id) {
+    measurement = new Measurement(body)
+    req.alerts.push({
+      severity: 'info',
+      message: 'the measurement has been created succesfully.',
+    })
+  } else {
+    measurement = await Measurement.findById(body._id)
+    measurement.overwrite(body)
+    req.alerts.push({
+      severity: 'info',
+      message: 'the measurement has been updated succesfully.',
+    })
+  }
   await measurement.save()
   req.alerts.push({
     severity: 'info',
@@ -88,7 +134,6 @@ authRoute('post', '/measurement/add', async (req, res) => {
       measurement: measurement.toObject()
     })
 })
-
 
 xprs.post('/login', async (req, res) => {
   const { email, password } = req.body

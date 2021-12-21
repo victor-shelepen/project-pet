@@ -1,5 +1,8 @@
 @appUrl = http://localhost:3001
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MWExMGQ3NmFkNmVlYWIwODY0NzU0N2EiLCJpYXQiOjE2Mzk0MDcyMjZ9.91eeS2mES25rJMb3LwKq7EiJ_wIh9oMgX6dv8FYedmY
+
+@measurementId = 61c190be803b289c9e9edba0
+
 ###
 
 // Get page.
@@ -35,3 +38,33 @@ Authorization: token {{token}}
   "height": "171",
   "weight": "78.2"
 }
+
+###
+// Save measurement.
+POST {{appUrl}}/measurement/add HTTP/1.1
+content-type: application/json
+Authorization: token {{token}}
+
+{
+  "_id": "{{measurementId}}",
+  "height": "171",
+  "weight": "78.4"
+}
+
+###
+// Measurements.
+GET {{appUrl}}/measurement/list HTTP/1.1
+content-type: application/json
+Authorization: token {{token}}
+
+###
+// Retrieve a measurement.
+GET {{appUrl}}/measurement/get/{{measurementId}} HTTP/1.1
+content-type: application/json
+Authorization: token {{token}}
+
+###
+// Deletes the measurement.
+GET {{appUrl}}/measurement/delete/{{measurementId}} HTTP/1.1
+content-type: application/json
+Authorization: token {{token}}

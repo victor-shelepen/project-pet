@@ -1,19 +1,28 @@
-import React from 'react'
-import { useState } from 'react'
-import { Grid, TextField, Button } from '@material-ui/core'
+import { Button, Grid, TextField } from '@material-ui/core'
 import {
   Alert
 } from '@material-ui/lab'
-import { post } from '../../lib'
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { post, get } from '../../lib'
 
 export default function (props) {
+  const navigate = useNavigate()
+  let { id } = useParams();
+  console.log('----', props.type)
   const [isLoading, setIsLoading] = useState(false)
   const [alerts, setAlerts] = useState()
-  const [id, setId] = useState(props.id)
   const [object, setObject] = useState({
     height: 0,
     weight: 0
   })
+
+  useEffect(async () => {
+    if (id) {
+      const { measurement } = await get(`/api/measurement/get/${id}`)
+      setObject(measurement)
+    }
+  }, [])
 
   function updateObject(key, value) {
     const _object = {
@@ -29,6 +38,14 @@ export default function (props) {
     setIsLoading(false)
     const { alerts } = response
     setAlerts(alerts)
+  }
+
+  async function deleteClicked() {
+    setIsLoading(true)
+    const { alerts } = await get(`/api/measurement/delete/${object._id}`)
+    setAlerts(alerts)
+    setIsLoading(false)
+    navigate('/measurement/list')
   }
 
   return (
@@ -60,6 +77,13 @@ export default function (props) {
         <Grid container>
           <Grid item xs={6}>
             {JSON.stringify(object)}
+            {(!!object && !!object._id) && (<Button
+              disabled={isLoading}
+              color='primary'
+              onClick={deleteClicked}
+              fullWidth>
+              Delete
+            </Button>)}
           </Grid>
           <Grid item xs={6}>
             <Button

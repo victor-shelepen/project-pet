@@ -10,6 +10,7 @@ import Users from '../page/Users'
 import Home from '../page/Home'
 import Login from '../page/Login'
 import FormMeasurement from '../page/Measurement/Form'
+import ListMeasurement from '../page/Measurement/List'
 
 export default function () {
   return (
@@ -20,7 +21,9 @@ export default function () {
         <Route path="/users" element={<Users />} />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/measurement/add" element={<FormMeasurement />} />
+        <Route path="/measurement/add" element={<FormMeasurement type='add'/>} />
+        <Route path="/measurement/edit/:id" element={<FormMeasurement type='edit'/>} />
+        <Route path="/measurement/list" element={<ListMeasurement />} />
       </Routes>
     </Router>
   )

@@ -45,6 +45,7 @@ export default function () {
            <>
              <Button color="inherit" component={Link} to='/users'>Users</Button>
              <Button color="inherit" component={Link} to='/measurement/add'>Add</Button>
+             <Button color="inherit" component={Link} to='/measurement/list'>Measurements</Button>
              <Button color="inherit" onClick={logoutClicked}>Logout</Button>
            </>
           ) : (
