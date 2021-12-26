@@ -1,7 +1,6 @@
 import React from 'react';
-import { Button, ButtonGroup } from '@material-ui/core';
-import LoginIcon from '@material-ui/icons/AccountCircle';
-import LogoutIcon from '@material-ui/icons/ExitToApp';
+import { Button, ButtonGroup } from '@mui/material';
+import { Login as LoginIcon , ExitToApp as LogoutIcon } from '@mui/icons-material';
 
 export default function () {
   return (

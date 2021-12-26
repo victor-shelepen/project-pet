@@ -6,7 +6,7 @@ import {
   DialogContentText,
   DialogTitle,
   DialogActions,
-} from '@material-ui/core';
+} from '@mui/material';
 import { useContext } from 'react';
 
 export function useConfirm() {

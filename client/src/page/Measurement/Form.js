@@ -1,7 +1,7 @@
-import { Button, Grid, TextField } from '@material-ui/core'
+import { Button, Grid, TextField } from '@mui/material'
 import {
   Alert
-} from '@material-ui/lab'
+} from '@mui/lab'
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { post, get } from '../../lib'

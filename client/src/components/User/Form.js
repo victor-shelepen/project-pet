@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Grid, TextField, Button } from "@material-ui/core"
+import { Grid, TextField, Button } from "@mui/material"
 
 export default function ({ user, changed, deleted }) {
   const [name, setName] = useState(user.name)

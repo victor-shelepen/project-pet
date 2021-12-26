@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Grid } from '@material-ui/core'
+import { Grid } from '@mui/material'
 import UserFrame from '../components/User/Frame'
 import UserList from '../components/User/List'
 

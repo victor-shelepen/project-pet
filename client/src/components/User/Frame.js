@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { Grid, ButtonGroup, Button } from '@material-ui/core'
+import { Grid, ButtonGroup, Button } from '@mui/material'
 import View from './View'
 import Form from './Form'
 
