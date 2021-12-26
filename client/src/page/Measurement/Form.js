@@ -5,11 +5,13 @@ import {
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { post, get } from '../../lib'
+import { useConfirm } from '../../components/Prompt'
 
 export default function (props) {
   const navigate = useNavigate()
   let { id } = useParams();
   console.log('----', props.type)
+  const confirm = useConfirm()
   const [isLoading, setIsLoading] = useState(false)
   const [alerts, setAlerts] = useState()
   const [object, setObject] = useState({
@@ -41,11 +43,17 @@ export default function (props) {
   }
 
   async function deleteClicked() {
-    setIsLoading(true)
-    const { alerts } = await get(`/api/measurement/delete/${object._id}`)
-    setAlerts(alerts)
-    setIsLoading(false)
-    navigate('/measurement/list')
+    const decision = await confirm({
+      title: 'Confirmation',
+      text: 'Confirm the deletion action.'
+    })
+    if (decision == 'agree') {
+      setIsLoading(true)
+      const { alerts } = await get(`/api/measurement/delete/${object._id}`)
+      setAlerts(alerts)
+      setIsLoading(false)
+      navigate('/measurement/list')
+    }
   }
 
   return (
@@ -76,7 +84,6 @@ export default function (props) {
         </Grid>
         <Grid container>
           <Grid item xs={6}>
-            {JSON.stringify(object)}
             {(!!object && !!object._id) && (<Button
               disabled={isLoading}
               color='primary'
