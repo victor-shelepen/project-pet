@@ -1,16 +1,15 @@
-import {
-  HashRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom"
 import React from 'react'
-import Header from './Header'
+import {
+  HashRouter as Router, Route, Routes
+} from "react-router-dom"
 import About from '../page/About'
-import Users from '../page/Users'
 import Home from '../page/Home'
 import Login from '../page/Login'
 import FormMeasurement from '../page/Measurement/Form'
 import ListMeasurement from '../page/Measurement/List'
+import Register from "../page/Register"
+import Users from '../page/Users'
+import Header from './Header'
 
 export default function () {
   return (
@@ -21,6 +20,7 @@ export default function () {
         <Route path="/users" element={<Users />} />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/measurement/add" element={<FormMeasurement type='add'/>} />
         <Route path="/measurement/edit/:id" element={<FormMeasurement type='edit'/>} />
         <Route path="/measurement/list" element={<ListMeasurement />} />
