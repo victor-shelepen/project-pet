@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { json } from 'express'
 import bodyParser from 'body-parser'
 import User from './db/User'
 import Measurement from './db/Measurement'
@@ -10,7 +10,6 @@ xprs.use(bodyParser.json())
 xprs.set('view engine', 'pug');
 xprs.use(function (req, res, next) {
   req.alerts = []
-  next()
 
   res.back = function (data = {}) {
     const _data = {
@@ -20,6 +19,8 @@ xprs.use(function (req, res, next) {
 
     this.json(_data)
   }
+
+  next()
 })
 
 const path = __dirname + '/../../client/dist'
@@ -133,6 +134,42 @@ authRoute('post', '/measurement/add', async (req, res) => {
     .back({
       measurement: measurement.toObject()
     })
+})
+
+xprs.post('/register', async (req, res) => {
+  const user = new User(req.body)
+
+  // Object validation.
+  const validation = user.validateSync()
+  if (validation && validation.message) {
+    req.alerts.push({
+      severity: 'error',
+      message: validation.message
+    })
+    res.back()
+    return
+  }
+
+  // Check if such email exists.
+  const anotherUser = await User.findOne({ email: user.email })
+  if (anotherUser) {
+    req.alerts.push({
+      severity: 'error',
+      message: `User with such email ${user.email} exists!`
+    })
+    res.back()
+    return
+  }
+
+  // Save new user.
+  await user.save()
+  req.alerts.push({
+    severity: 'success',
+    message: 'User has been created successfuly.'
+  })
+  res.back({
+    success: true
+  })
 })
 
 xprs.post('/validEmail', async (req, res) => {

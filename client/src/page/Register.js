@@ -4,8 +4,10 @@ import { TextField } from 'formik-mui'
 import { Formik, Form, Field } from 'formik'
 import { post } from '../lib'
 import * as yup from 'yup'
+import { useNavigate } from "react-router-dom";
 
 export default function () {
+  const navigate = useNavigate()
 
   const initialValues = {
     name: '',
@@ -19,11 +21,7 @@ export default function () {
     email: yup.string().email('Email required...').required('Required...')
       .test('Unique Email', 'Email already in use',
         async function (value) {
-          const url = '/api/validEmail'
-          const data = {
-            email: value,
-          }
-          const { valid } = await post(url, data)
+          const { valid } = await post('/api/validEmail', { email: value })
 
           return valid
         }
@@ -32,11 +30,14 @@ export default function () {
     confirmPassword: yup.string().oneOf([yup.ref('password'), ''], 'Passwords must match').required('Required')
   })
 
-  const onSubmit = (values, { setSubmitting }) => {
-    setTimeout(() => {
-      setSubmitting(false);
-      alert(JSON.stringify(values, null, 2));
-    }, 500);
+  const onSubmit = async (values, { setSubmitting }) => {
+    setSubmitting(true)
+    const { success, alerts } = await post('/api/register', values)
+    console.log(success, alerts)
+    if (success) {
+      navigate('/login')
+    }
+    setSubmitting(false)
   }
 
   return (
