@@ -19,6 +19,15 @@ content-type: application/json
 }
 
 ###
+// Validate email.
+POST {{appUrl}}/validEmail HTTP/1.1
+content-type: application/json
+
+{
+  "email": "Jeanne.Kutch28@hotmail.com"
+}
+
+###
 // Get page.
 GET {{appUrl}} HTTP/1.1
 Authorization: token {{token}}

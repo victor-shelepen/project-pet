@@ -135,6 +135,16 @@ authRoute('post', '/measurement/add', async (req, res) => {
     })
 })
 
+xprs.post('/validEmail', async (req, res) => {
+  const { email } = req.body
+  const user = await User.findOne({ email })
+  if (user) {
+    res.json({valid: false})
+  } else {
+    res.json({valid: true})
+  }
+})
+
 xprs.post('/login', async (req, res) => {
   const { email, password } = req.body
   const user = await User.findOne({ email }).select('+password')

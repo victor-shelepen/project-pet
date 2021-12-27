@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Grid, Button, Box, LinearProgress } from '@mui/material'
 import { TextField } from 'formik-mui'
 import { Formik, Form, Field } from 'formik'
+import { post } from '../lib'
 import * as yup from 'yup'
 
 export default function () {
@@ -15,7 +16,18 @@ export default function () {
 
   const validationSchema = yup.object({
     name: yup.string().required('Name is required...'),
-    email: yup.string().email('Email required...').required('Required...'),
+    email: yup.string().email('Email required...').required('Required...')
+      .test('Unique Email', 'Email already in use',
+        async function (value) {
+          const url = '/api/validEmail'
+          const data = {
+            email: value,
+          }
+          const { valid } = await post(url, data)
+
+          return valid
+        }
+      ),
     password: yup.string().required('Required.'),
     confirmPassword: yup.string().oneOf([yup.ref('password'), ''], 'Passwords must match').required('Required')
   })
