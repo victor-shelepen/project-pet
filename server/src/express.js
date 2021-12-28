@@ -102,6 +102,10 @@ authRoute('get', '/measurement/delete/:id', async (req, res) => {
   const userId = req.user._id
   const id = req.params.id
   await Measurement.findOneAndRemove({user: userId, _id: id})
+  req.alerts.push({
+    severity: 'info',
+    message: 'the measurement has been deleted succesfully.',
+  })
   res.back()
 })
 
@@ -114,14 +118,14 @@ authRoute('post', '/measurement/add', async (req, res) => {
   if (!body._id) {
     measurement = new Measurement(body)
     req.alerts.push({
-      severity: 'info',
+      severity: 'success',
       message: 'the measurement has been created succesfully.',
     })
   } else {
     measurement = await Measurement.findById(body._id)
     measurement.overwrite(body)
     req.alerts.push({
-      severity: 'info',
+      severity: 'success',
       message: 'the measurement has been updated succesfully.',
     })
   }
