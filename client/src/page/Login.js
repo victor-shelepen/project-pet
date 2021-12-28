@@ -1,18 +1,17 @@
-import React, { useState } from 'react'
-import { TextField, Button, Grid } from '@mui/material'
 import { Login as LoginIcon } from '@mui/icons-material';
-import { post, setToken } from '../lib'
-import {
-  Alert
-} from '@mui/lab'
-import { useNavigate } from 'react-router-dom'
+import { Button, Grid, TextField } from '@mui/material';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import useAlerts from '../hooks/useAlerts';
+import { post, setToken } from '../lib';
 
 export default function () {
   const navigate = useNavigate()
+  const pushAlerts = useAlerts()
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [alerts, setAlerts] = useState()
 
   async function loginClicked() {
     const url = '/api/login'
@@ -28,16 +27,14 @@ export default function () {
       setToken(token)
       navigate('/users')
     }
-    setAlerts(alerts)
+
+    pushAlerts(alerts)
   }
 
   return (
     <>
       <Grid container justifyContent='center' alignItems='center'>
         <Grid item xs={4} container direction='column'>
-          <Grid item>
-            {!!alerts && (alerts.map((alert, index) => (<Alert key={index} severity={alert.severity}>{alert.message}</Alert>)))}
-          </Grid>
           <Grid item>
             <TextField
               label='First Name'

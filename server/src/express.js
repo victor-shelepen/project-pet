@@ -196,15 +196,20 @@ xprs.post('/login', async (req, res) => {
   if (user.comparePassword(password)) {
     const token = encodeToken(user._id)
     res.setHeader('Set-Cookie', `token=${token}`);
-    res.json({
-      status: true,
-      message: `You(${user.email}) have been authenticated successfuly.`,
+    req.alerts.push({
+      severity: 'success',
+      message: `You(${user.email}) have been authenticated successfuly.`
+    })
+    res.back({
       token
     })
   } else {
-    res.json({
-      status: false,
-      message: 'Passwords are not equal.'
+    req.alerts.push({
+      severity: 'error',
+      message: `Passwords are not equal`
+    })
+    res.back({
+      status: false
     })
   }
 })

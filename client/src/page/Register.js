@@ -5,9 +5,11 @@ import { Formik, Form, Field } from 'formik'
 import { post } from '../lib'
 import * as yup from 'yup'
 import { useNavigate } from "react-router-dom";
+import useAlerts from "../hooks/useAlerts";
 
 export default function () {
   const navigate = useNavigate()
+  const pushAlerts = useAlerts()
 
   const initialValues = {
     name: '',
@@ -33,7 +35,7 @@ export default function () {
   const onSubmit = async (values, { setSubmitting }) => {
     setSubmitting(true)
     const { success, alerts } = await post('/api/register', values)
-    console.log(success, alerts)
+    pushAlerts(alerts)
     if (success) {
       navigate('/login')
     }
