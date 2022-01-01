@@ -1,4 +1,4 @@
-import { Button, Grid, LinearProgress } from '@mui/material'
+import { Button, Grid, LinearProgress, Typography } from '@mui/material'
 import { Field, Form, Formik } from 'formik'
 import { TextField } from 'formik-mui'
 import React, { useEffect, useState } from 'react'
@@ -45,12 +45,18 @@ export default function (props) {
       const { measurement: _measurement } = await get(`/api/measurement/get/${id}`)
       setMeasurement(_measurement)
       setInitialValues(_measurement)
+    } else {
+      setMeasurement(false)
+      setInitialValues({
+        weight: 0,
+        height: 0,
+      })
     }
-  }, [])
+  }, [id])
 
   return (
     <>
-      <h1>Measurement ({props.type})</h1>
+      <Typography variant="subtitle1">Measurement ({props.type})</Typography>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
