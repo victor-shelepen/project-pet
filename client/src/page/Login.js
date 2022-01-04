@@ -1,7 +1,9 @@
-import { Login as LoginIcon } from '@mui/icons-material';
-import { Button, Grid, TextField } from '@mui/material';
-import React, { useState } from 'react';
+import { Button, Grid, LinearProgress } from '@mui/material';
+import { Field, Form, Formik } from 'formik';
+import { TextField } from 'formik-mui';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import * as yup from 'yup';
 import useAlerts from '../hooks/useAlerts';
 import { post, setToken } from '../lib';
 
@@ -9,19 +11,18 @@ export default function () {
   const navigate = useNavigate()
   const pushAlerts = useAlerts()
 
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const initialValues = {
+    email: '',
+    password: ''
+  }
 
-  async function loginClicked() {
-    const url = '/api/login'
-    const data = {
-      email,
-      password
-    }
-    setIsLoading(true)
-    const response = await post(url, data)
-    setIsLoading(false)
+  const validationSchema = yup.object({
+    email: yup.string().email().required(),
+    password: yup.string().required()
+  })
+
+  async function onSubmit(values) {
+    const response = await post('/api/login', values)
     const { alerts, token } = response
     if (!!token) {
       setToken(token)
@@ -31,43 +32,49 @@ export default function () {
     pushAlerts(alerts)
   }
 
+
   return (
     <>
-      <Grid container justifyContent='center' alignItems='center'>
-        <Grid item xs={4} container direction='column'>
-          <Grid item>
-            <TextField
-              label='First Name'
-              variant='filled'
-              required
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              fullWidth
-            />
-          </Grid>
-          <Grid item>
-            <TextField
-              type='password'
-              label='Password'
-              variant='filled'
-              required
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              fullWidth
-            />
-          </Grid>
-          <Grid item>
-            <Button
-              disabled={isLoading}
-              endIcon={<LoginIcon />}
-              color='primary'
-              onClick={loginClicked}
-              fullWidth>
-              Login
-            </Button>
-          </Grid>
-        </Grid>
-      </Grid>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+      >
+        {({isSubmitting, isValid}) => (
+          <Form>
+            <Grid container direction="column" spacing={2}>
+              <Grid item>
+                <Field
+                  component={TextField}
+                  name='email'
+                  label='Email'
+                  fullWidth
+                />
+              </Grid>
+              <Grid item>
+                <Field
+                  component={TextField}
+                  name='password'
+                  label='Password'
+                  type='password'
+                  fullWidth
+                />
+              </Grid>
+              <Grid item>
+                {isSubmitting && <LinearProgress />}
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disabled={ isSubmitting || !isValid }
+                  type="submit"
+                >
+                  Submit
+                </Button>
+              </Grid>
+            </Grid>
+          </Form>
+        )}
+      </Formik>
     </>
   )
 }
