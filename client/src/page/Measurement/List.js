@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { get } from '../../lib'
-import { Button, Grid } from '@mui/material'
+import { Button, Grid, Typography, MenuItem } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { useConfirm } from '../../components/Prompt'
 import useAlerts from '../../hooks/useAlerts'
+import LocalMenu from '../../components/LocalMenu'
+import { useNavigate } from 'react-router-dom'
 
 export default function () {
   const confirm = useConfirm()
   const pushAlerts = useAlerts()
+  const navigate = useNavigate()
 
   const [measurements, setMeasurements] = useState([])
 
@@ -35,7 +38,7 @@ export default function () {
 
   return (
     <>
-      <h1>Measurements</h1>
+      <Typography variant='h4'>Measurements</Typography>
       <Grid container direction='column'>
         <Grid item container>
           <Grid item xs={3}>Height</Grid>
@@ -53,6 +56,20 @@ export default function () {
           </Grid>
         ))}
       </Grid>
+      <LocalMenu>
+        {({ close }) => (
+          <div>
+            <MenuItem
+              onClick={(e) => {
+                navigate('/measurement/add')
+                close();
+              }}
+            >
+              Add
+            </MenuItem>
+          </div>
+        )}
+      </LocalMenu>
     </>
   )
 }

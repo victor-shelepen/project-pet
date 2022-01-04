@@ -1,4 +1,4 @@
-import { Button, Grid, LinearProgress } from '@mui/material';
+import { Button, Grid, LinearProgress, Typography } from '@mui/material';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-mui';
 import React from 'react';
@@ -35,6 +35,7 @@ export default function () {
 
   return (
     <>
+      <Typography variant='h4'>Login</Typography>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

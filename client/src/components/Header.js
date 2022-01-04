@@ -1,5 +1,6 @@
 import {
-  Menu as MenuIcon
+  Menu as MenuIcon,
+  ArrowBack as ArrowBackIcon
 } from '@mui/icons-material';
 import { AppBar, Box, Button, Drawer, IconButton, List, ListItem, Toolbar, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
@@ -60,7 +61,6 @@ export default function () {
               {vIsAuthenticated ? (
                 <>
                   <ListItem><Button color="inherit" component={Link} to='/users'>Users</Button></ListItem>
-                  <ListItem><Button color="inherit" component={Link} to='/measurement/add'>Add</Button></ListItem>
                   <ListItem><Button color="inherit" component={Link} to='/measurement/list'>Measurements</Button></ListItem>
                   <ListItem><Button color="inherit" onClick={logoutClicked}>Logout</Button></ListItem>
                 </>
