@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import { get } from '../../lib'
-import { Button, Grid, Typography, MenuItem } from '@mui/material'
-import { Link } from 'react-router-dom'
-import { useConfirm } from '../../components/Prompt'
-import useAlerts from '../../hooks/useAlerts'
-import LocalMenu from '../../components/LocalMenu'
+import { Grid, MenuItem, Typography } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import LocalMenu from '../../components/LocalMenu'
+import { useConfirm } from '../../components/Prompt'
+import RowMenu from '../../components/RowMenu'
+import useAlerts from '../../hooks/useAlerts'
+import { get } from '../../lib'
 
 export default function () {
   const confirm = useConfirm()
@@ -49,9 +49,11 @@ export default function () {
           <Grid item container key={m._id}>
             <Grid item xs={3}>{m.height}</Grid>
             <Grid item xs={3}>{m.weight}</Grid>
-            <Grid item xs={6} container>
-              <Button color="inherit" component={Link} to={'/measurement/edit/' + m._id}>Edit</Button>
-              <Button color="inherit" onClick={e => deleteClicked(m._id)}>Delete</Button>
+            <Grid item xs={6}>
+              <RowMenu obj={m}>
+                <MenuItem onClick={e => navigate('/measurement/edit/' + m._id)}>Edit</MenuItem>
+                <MenuItem onClick={e => deleteClicked(m._id)} >Delete</MenuItem>
+              </RowMenu>
             </Grid>
           </Grid>
         ))}
