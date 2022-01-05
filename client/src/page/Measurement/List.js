@@ -54,8 +54,8 @@ export default function () {
       renderCell: (params) => (
         <strong>
           <RowMenu>
-            <MenuItem onClick={e => navigate('/measurement/edit/' + params.id)}>Edit</MenuItem>
-            <MenuItem onClick={e => deleteClicked(params._id)} >Delete</MenuItem>
+            <MenuItem onClick={() => navigate('/measurement/edit/' + params.id)}>Edit</MenuItem>
+            <MenuItem onClick={() => deleteClicked(params._id)} >Delete</MenuItem>
           </RowMenu>
         </strong>
       )
@@ -85,6 +85,14 @@ export default function () {
               }}
             >
               Add
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                navigate('/measurement/chart')
+                close();
+              }}
+            >
+              Charts
             </MenuItem>
           </div>
         )}
