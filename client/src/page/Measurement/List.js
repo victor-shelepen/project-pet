@@ -1,4 +1,5 @@
-import { Grid, MenuItem, Typography } from '@mui/material'
+import { MenuItem, Typography } from '@mui/material'
+import { DataGrid } from '@mui/x-data-grid'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import LocalMenu from '../../components/LocalMenu'
@@ -36,33 +37,49 @@ export default function () {
     await updateMeasurements()
   }, [])
 
+  const columns = [
+    { field: 'height', headerName: 'Height'},
+    { field: 'weight', headerName: 'Weight'},
+    {
+      field: 'createdAt',
+      type: 'date',
+      headerName: 'Created',
+      valueGetter: (params) => {
+        return new Date(params.row.createdAt)
+      },
+    },
+    {
+      field: 'date',
+      type: 'actions',
+      renderCell: (params) => (
+        <strong>
+          <RowMenu>
+            <MenuItem onClick={e => navigate('/measurement/edit/' + params.id)}>Edit</MenuItem>
+            <MenuItem onClick={e => deleteClicked(params._id)} >Delete</MenuItem>
+          </RowMenu>
+        </strong>
+      )
+    },
+  ];
+
   return (
     <>
       <Typography variant='h4'>Measurements</Typography>
-      <Grid container direction='column'>
-        <Grid item container>
-          <Grid item xs={3}>Height</Grid>
-          <Grid item xs={3}> Weight</Grid>
-          <Grid item xs={6}></Grid>
-        </Grid>
-        {measurements.map(m => (
-          <Grid item container key={m._id}>
-            <Grid item xs={3}>{m.height}</Grid>
-            <Grid item xs={3}>{m.weight}</Grid>
-            <Grid item xs={6}>
-              <RowMenu obj={m}>
-                <MenuItem onClick={e => navigate('/measurement/edit/' + m._id)}>Edit</MenuItem>
-                <MenuItem onClick={e => deleteClicked(m._id)} >Delete</MenuItem>
-              </RowMenu>
-            </Grid>
-          </Grid>
-        ))}
-      </Grid>
+      <div style={{ height: 400, width: '100%' }}>
+        <DataGrid
+          rows={measurements}
+          columns={columns}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+          disableSelectionOnClick
+          getRowId={(row) => row._id}
+        />
+      </div>
       <LocalMenu>
         {({ close }) => (
           <div>
             <MenuItem
-              onClick={(e) => {
+              onClick={() => {
                 navigate('/measurement/add')
                 close();
               }}

@@ -3,8 +3,8 @@ import { IconButton, Menu } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 
 export default function ({ children }) {
-  const [ isOpen, setIsOpen ] = useState()
-  const [ anchorEl, setAnchorEl ] = useState()
+  const [ isOpen, setIsOpen ] = useState(false)
+  const [ anchorEl, setAnchorEl ] = useState(null)
 
   const openClicked = useCallback((e) => {
     setAnchorEl(e.currentTarget)

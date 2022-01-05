@@ -16,6 +16,7 @@
     "@babel/plugin-transform-runtime": "^7.16.4",
     "@babel/preset-env": "^7.16.4",
     "@babel/preset-react": "^7.16.0",
+    "@mui/x-data-grid": "^5.2.1",
     "babel-loader": "^8.2.3",
     "css-loader": "^6.5.1",
     "html-webpack-plugin": "^5.5.0",

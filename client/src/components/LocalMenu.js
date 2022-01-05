@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useCallback} from 'react'
 import {Menu, Fab} from '@mui/material'
 import { Menu as MenuIcon } from '@mui/icons-material'
 
@@ -16,10 +16,15 @@ export default function ({ children }) {
 
   const [open, setOpen] = useState(false);
 
-  function openClicked(event) {
-    setAnchorEl(event.currentTarget);
+  const openClicked = useCallback((e) => {
+    setAnchorEl(e.currentTarget);
     setOpen(true);
-  }
+  })
+
+  const handleClose = useCallback(() => {
+    setAnchorEl(false)
+    setIsOpen(false)
+  })
 
   function close() {
     setOpen(false);
@@ -33,6 +38,7 @@ export default function ({ children }) {
         aria-label="add"
         style={style}
         onClick={openClicked}
+        onClose={handleClose}
         variant="extended"
       >
         <MenuIcon /> Menu
