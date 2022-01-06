@@ -1,6 +1,8 @@
 import { createContext } from 'react'
 import { EventEmitter } from 'events'
 
+export const RECAPTCHA_SITE_KEY = '6LdbrPQdAAAAAGikk-qc8ohTtPAfZfgFiXHSeNh3'
+
 export const libEM = new EventEmitter()
 
 export const LibEMContext = createContext(libEM)
@@ -61,3 +63,40 @@ export async function get(url) {
 
   return responseData
 }
+
+function anonymousPostRoute(url, callback) {
+  xprs.post(url, async (req, res) => {
+    const { recaptcha, secret } = req.body
+
+    if (secret && secret == process.env.secret) {
+      // Ok. Pass futher.
+    }
+    else {
+      const response = await fetch(`https://www.google.com/recaptcha/api/siteverify`, {
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+        },
+        body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptcha}`
+      })
+      const { success } = await response.json()
+      if (!success) {
+        req.alerts.push({
+          severity: 'error',
+          message: 'Invalid verification code.',
+        })
+        res
+          .status(401)
+          .back()
+
+        return
+      }
+
+      delete req.body.recaptcha
+    }
+
+    await callback(req, res)
+  })
+}
+

@@ -1,9 +1,8 @@
-import express, { json } from 'express'
 import bodyParser from 'body-parser'
-import User from './db/User'
+import express from 'express'
 import Measurement from './db/Measurement'
-import { decodeToken, encodeToken } from './lib'
-import * as fetch from 'node-fetch';
+import User from './db/User'
+import { decodeToken, encodeToken, authRoute, anonymousPostRoute } from './lib'
 
 export const xprs = express()
 xprs.use(bodyParser.urlencoded({ extended: false }))
@@ -51,63 +50,14 @@ xprs.get('/', async (req, res) => {
   res.send(`Hello World!!!${req?.user?.email}`)
 })
 
-function authRoute(type, url, callback) {
-  xprs[type](url, async (req, res) => {
-    if (!req.user) {
-      req.alerts.push({
-        severity: 'error',
-        message: 'The user should be authenticated.',
-      })
-      res
-        .status(401)
-        .back()
-      return
-    }
-    await callback(req, res)
-  })
-}
-
-function anonymousPostRoute(url, callback) {
-  xprs.post(url, async (req, res) => {
-    const { recaptcha, secret } = req.body
-
-    if (secret && secret == process.env.secret) {
-      // Ok. Pass futher.
-    }
-    else {
-      const response = await fetch(`https://www.google.com/recaptcha/api/siteverify`, {
-        method: "post",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
-        },
-        body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptcha}`
-      })
-      const { success, ...rest } = await response.json()
-      if (!success) {
-        req.alerts.push({
-          severity: 'error',
-          message: 'Invalid verification code.',
-        })
-        res
-          .status(401)
-          .back()
-        return
-      }
-    }
-
-    await callback(req, res)
-  })
-}
-
-authRoute('get', '/users', async (req, res) => {
+authRoute(xprs, 'get', '/users', async (req, res) => {
   const _users = await User.find()
   const users = _users.map(u => u.toObject())
   res
     .json({ users })
 })
 
-authRoute('get', '/measurement/list', async (req, res) => {
+authRoute(xprs, 'get', '/measurement/list', async (req, res) => {
   const userId = req.user._id
   const measurements = (await Measurement.find({ user: userId }).select('-user')).map(m => m.toObject())
   res
@@ -116,7 +66,7 @@ authRoute('get', '/measurement/list', async (req, res) => {
     })
 })
 
-authRoute('get', '/measurement/get/:id', async (req, res) => {
+authRoute(xprs, 'get', '/measurement/get/:id', async (req, res) => {
   const userId = req.user._id
   const id = req.params.id
   const measurement = (await Measurement
@@ -132,7 +82,7 @@ authRoute('get', '/measurement/get/:id', async (req, res) => {
     })
 })
 
-authRoute('get', '/measurement/delete/:id', async (req, res) => {
+authRoute(xprs, 'get', '/measurement/delete/:id', async (req, res) => {
   const userId = req.user._id
   const id = req.params.id
   await Measurement.findOneAndRemove({ user: userId, _id: id })
@@ -143,7 +93,7 @@ authRoute('get', '/measurement/delete/:id', async (req, res) => {
   res.back()
 })
 
-authRoute('post', '/measurement/add', async (req, res) => {
+authRoute(xprs, 'post', '/measurement/add', async (req, res) => {
   const body = {
     ...(!req.body.user && { user: req.user._id }),
     ...req.body
@@ -174,7 +124,7 @@ authRoute('post', '/measurement/add', async (req, res) => {
     })
 })
 
-xprs.post('/register', async (req, res) => {
+anonymousPostRoute(xprs, '/register', async (req, res) => {
   const user = new User(req.body)
 
   // Object validation.
@@ -220,7 +170,7 @@ xprs.post('/validEmail', async (req, res) => {
   }
 })
 
-anonymousPostRoute('/login', async (req, res) => {
+anonymousPostRoute(xprs, '/login', async (req, res) => {
   const { email, password } = req.body
 
   const user = await User.findOne({ email }).select('+password')

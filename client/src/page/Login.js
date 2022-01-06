@@ -5,7 +5,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import useAlerts from '../hooks/useAlerts';
-import { post, setToken } from '../lib';
+import { post, setToken, RECAPTCHA_SITE_KEY } from '../lib';
 import Recaptcha from "react-google-recaptcha";
 
 export default function () {
@@ -45,11 +45,11 @@ export default function () {
         onSubmit={onSubmit}
       >
         {({ isSubmitting, isValid, setFieldValue, setFieldTouched}) => {
+
           function onChange(value) {
             setFieldValue('recaptcha', value)
             setFieldTouched('recaptcha')
           }
-
 
           return (
             <Form>
@@ -73,7 +73,7 @@ export default function () {
                 </Grid>
                 <Grid item>
                   <Recaptcha
-                    sitekey="6LdbrPQdAAAAAGikk-qc8ohTtPAfZfgFiXHSeNh3"
+                    sitekey={RECAPTCHA_SITE_KEY}
                     onChange={onChange}
                   />
                   <Typography sx={{color: 'red'}}>
