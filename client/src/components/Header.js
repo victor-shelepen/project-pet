@@ -58,6 +58,9 @@ export default function () {
               <ListItem>
                 <Button color="inherit" component={Link} to='/about'>About</Button>
               </ListItem>
+              <ListItem>
+                <Button color="inherit" component={Link} to='/currency'>Currency</Button>
+              </ListItem>
               {vIsAuthenticated ? (
                 <>
                   <ListItem><Button color="inherit" component={Link} to='/users'>Users</Button></ListItem>

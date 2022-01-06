@@ -20,7 +20,8 @@
     "faker": "^5.5.3",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.13",
-    "node-fetch": "^2.6.6"
+    "node-fetch": "^2.6.6",
+    "ws": "^8.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",

@@ -11,6 +11,7 @@ import ChartMeasurement from '../page/Measurement/Chart'
 import Register from "../page/Register"
 import Users from '../page/Users'
 import Header from './Header'
+import Currency from '../page/Currency'
 
 export default function () {
   return (
@@ -26,6 +27,7 @@ export default function () {
         <Route path="/measurement/edit/:id" element={<FormMeasurement type='edit'/>} />
         <Route path="/measurement/list" element={<ListMeasurement />} />
         <Route path="/measurement/chart" element={<ChartMeasurement />} />
+        <Route path="/currency" element={<Currency />} />
       </Routes>
     </Router>
   )
