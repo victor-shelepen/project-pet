@@ -26,7 +26,8 @@ content-type: application/json
 
 {
   "email": "Jeanne.Kutch28@hotmail.com",
-  "password": "some_password"
+  "password": "some_password",
+  "secret": "flower"
 }
 
 ###

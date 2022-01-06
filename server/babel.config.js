@@ -5,5 +5,6 @@ module.exports = {
   plugins: [
     'source-map-support'
   ],
-  sourceMap: true
+  sourceMap: 'inline',
+  retainLines: true
 };
