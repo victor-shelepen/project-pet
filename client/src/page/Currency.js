@@ -6,7 +6,7 @@ export default function () {
   const [rates, setRates] = useState([])
 
   useEffect(() => {
-    const ws = new WebSocket('ws://localhost:9001');
+    const ws = new WebSocket(`ws://${window.location.hostname}:9001`);
     ws.onopen = async (event) => {
     };
     ws.onmessage = async function (event) {
